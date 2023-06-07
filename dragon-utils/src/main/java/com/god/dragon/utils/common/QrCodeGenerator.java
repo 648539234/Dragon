@@ -37,7 +37,7 @@ public class QrCodeGenerator {
 
         Map<EncodeHintType, Object> hints = new HashMap(); //设置二维码参数
         hints.put(EncodeHintType.CHARACTER_SET, "UTF-8"); //设置字符编码
-        hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.M); //二维码误差等级
+        hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.M); //二维码误差等级(因为logo要盖住部分二维码)
         hints.put(EncodeHintType.MARGIN, 1);//设置二维码边距,单位像素,值越小,二维码距离四周越近
 
         try (
