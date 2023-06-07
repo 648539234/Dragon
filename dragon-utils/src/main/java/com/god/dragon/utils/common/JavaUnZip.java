@@ -136,6 +136,6 @@ public class JavaUnZip {
     }
 
     public static void main(String[] args) throws Exception {
-        un7zip("C:\\Users\\64853\\Desktop\\abcd.7z","D:\\");
+        //un7zip("C:\\Users\\64853\\Desktop\\abcd.7z","D:\\");
     }
 }
