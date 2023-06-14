@@ -112,7 +112,7 @@ public class ReflectUtil {
         }
     }
 
-    public static Object getFieldValue(Object object,String fieldName,Object value){
+    public static Object getFieldValue(Object object,String fieldName){
         Field field = getDeclaredField(object,fieldName);
         if(field == null){
             throw new IllegalArgumentException("Could not find field ["+fieldName+"] on target ["+object+"]");
