@@ -10,8 +10,14 @@ import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfStamper;
 import com.itextpdf.text.pdf.parser.*;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.rendering.PDFRenderer;
+import org.springframework.util.Base64Utils;
 
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,6 +25,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * PDFBOX会报一个C:\WINDOWS\FONTS\mstmc.ttf无法加载
+ * 这个是WINDOWS10系统的一个BUG字体,不影响代码执行,如需修改则需要该底包
  * @author wuyuxiang
  * @version 1.0.0
  * @package com.god.dragon.utils.common
@@ -181,13 +189,118 @@ public class PdfUtils {
         return resultList;
     }
 
+    /**
+     * PDF转图片
+     * @param in PDF文件输入流
+     * @param out 图片文件输出流
+     * @param imgSuffix 图片后缀 png jpg...
+     */
+    public static void pdf2Img(InputStream in,OutputStream out,String imgSuffix){
+        try(PDDocument document = PDDocument.load(in)){
+            PDFRenderer pdfRenderer = new PDFRenderer(document);
+            List<BufferedImage> bufferedImages = new ArrayList<>();
+            for (int pageIndex = 0; pageIndex < document.getNumberOfPages(); pageIndex++) {
+                //将pdf转成图片,像素点越大,转成的图片越精细,对应的开销也越大
+                BufferedImage bim = pdfRenderer.renderImageWithDPI(pageIndex, 300);
+                //图片拼接成一个图片
+                bufferedImages.add(bim);
+            }
+            ImageIO.write(combineImg(bufferedImages), imgSuffix, out);
+        }catch (Exception e){
+            log.error("PDF转成图片失败:{}",e.getMessage(),e);
+            throw new RuntimeException("PDF转成图片失败");
+        }
+    }
+
+    /**
+     * PDF转图片
+     * @param in PDF文件输入流
+     * @param imgSuffix 图片后缀 png jpg...
+     * @return 返回生成后图片的字节数组
+     */
+    public static byte[] pdf2Img(byte[] in,String imgSuffix){
+        try(PDDocument document = PDDocument.load(in);
+            ByteArrayOutputStream bos = new ByteArrayOutputStream()){
+            PDFRenderer pdfRenderer = new PDFRenderer(document);
+            List<BufferedImage> bufferedImages = new ArrayList<>();
+            for (int pageIndex = 0; pageIndex < document.getNumberOfPages(); pageIndex++) {
+                //将pdf转成图片,像素点越大,转成的图片越精细,对应的开销也越大
+                BufferedImage bim = pdfRenderer.renderImageWithDPI(pageIndex, 300);
+                //图片拼接成一个图片
+                bufferedImages.add(bim);
+            }
+            ImageIO.write(combineImg(bufferedImages), imgSuffix, bos);
+            return bos.toByteArray();
+        }catch (Exception e){
+            log.error("PDF转成图片失败:{}",e.getMessage(),e);
+            throw new RuntimeException("PDF转成图片失败");
+        }
+    }
+
+    /**
+     * PDF转图片
+     * @param in PDF文件输入流
+     * @param imgSuffix 图片后缀 png jpg...
+     * @return 不合并图片返回每个图片的Base64
+     */
+    public static List<String> pdf2ImgWithoutCombine(byte[] in,String imgSuffix){
+        try(PDDocument document = PDDocument.load(in);
+            ByteArrayOutputStream bos = new ByteArrayOutputStream(1024*1024)){
+            PDFRenderer pdfRenderer = new PDFRenderer(document);
+            List<String> bufferedImages = new ArrayList<>();
+            for (int pageIndex = 0; pageIndex < document.getNumberOfPages(); pageIndex++) {
+                //将pdf转成图片,像素点越大,转成的图片越精细,对应的开销也越大
+                BufferedImage bim = pdfRenderer.renderImageWithDPI(pageIndex, 300);
+                ImageIO.write(bim, imgSuffix, bos);
+                //将图片转成Base64
+                String base64 = Base64Utils.encodeToString(bos.toByteArray());
+                bufferedImages.add(base64);
+                bos.reset();
+            }
+            return bufferedImages;
+        }catch (Exception e){
+            log.error("PDF转成图片失败:{}",e.getMessage(),e);
+            throw new RuntimeException("PDF转成图片失败");
+        }
+    }
+
+    /**
+     * 图片的上下拼接
+     * @param list
+     * @return
+     */
+    private static BufferedImage combineImg(List<BufferedImage> list){
+        int maxWidth = 0,totalHeight = 0;
+        //获取拼接后图片最大的宽度，获取拼接后图片总高度
+        for (BufferedImage bufferedImage : list) {
+            if(bufferedImage.getWidth()>maxWidth){
+                maxWidth = bufferedImage.getWidth();
+            }
+            totalHeight += bufferedImage.getHeight();
+        }
+        //根据拼接后图片最大的宽度和拼接后图片总高度生成画布
+        BufferedImage combinedImage = new BufferedImage(maxWidth, totalHeight, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = combinedImage.createGraphics();
+        int drawWidth = 0,drawHeight = 0;
+        //遍历拼接画图
+        for (BufferedImage bufferedImage : list) {
+            g2d.drawImage(bufferedImage, drawWidth, drawHeight, null);
+            drawHeight +=bufferedImage.getHeight();
+        }
+        g2d.dispose(); //关闭画笔资源
+        return combinedImage;
+    }
+
     public static void main(String[] args) throws Exception {
         FileInputStream fis = new FileInputStream("C:\\Users\\64853\\Desktop\\test.pdf");
         FileOutputStream fos = new FileOutputStream("C:\\Users\\64853\\Desktop\\test2.pdf");
-        PdfStamper pdfStamper = createPdfStamper(fis, fos);
-        List<Map<String, String>> names = findAppendText(pdfStamper, 1,"姓名");
-        Map<String,String> name = names.get(0);
-        appendText(pdfStamper,1,Float.valueOf(name.get("x"))+100,Float.valueOf(name.get("y")),10.56f,"朱佳叶");
-        closeReader(pdfStamper);
+//        PdfStamper pdfStamper = createPdfStamper(fis, fos);
+//        List<Map<String, String>> names = findAppendText(pdfStamper, 1,"姓名");
+//        Map<String,String> name = names.get(0);
+//        appendText(pdfStamper,1,Float.valueOf(name.get("x"))+100,Float.valueOf(name.get("y")),10.56f,"朱佳叶");
+//        closeReader(pdfStamper);
+
+        fos = new FileOutputStream("C:\\Users\\64853\\Desktop\\test2.png");
+        pdf2Img(fis,fos,"png");
     }
 }
