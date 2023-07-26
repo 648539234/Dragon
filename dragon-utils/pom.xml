@@ -18,6 +18,11 @@
             <artifactId>lombok</artifactId>
             <scope>provided</scope>
         </dependency>
+        <!--String工具包-->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
         <!--解压缩工具包-->
         <dependency>
             <groupId>org.apache.commons</groupId>

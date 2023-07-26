@@ -1,9 +1,9 @@
 package com.god.dragon.common.utils;
 
 import com.jcraft.jsch.*;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.StringUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -27,14 +27,14 @@ public class SFtpClientService {
      * SFTP连接
      */
     public static ChannelSftp connect(String host, String port, String username, String password) {
-        if (StringUtils.hasText(host) || StringUtils.hasText(username) || StringUtils.hasText(password)) {
+        if (StringUtils.isBlank(host) || StringUtils.isBlank(username) || StringUtils.isBlank(password)) {
             throw new IllegalArgumentException("SFTP请求参数不全");
         }
         Session session = null;
         ChannelSftp channel = null;
         try {
             JSch jsch = new JSch();
-            if (StringUtils.hasText(port)) {
+            if (StringUtils.isBlank(port)) { //默认连 22 端口
                 session = jsch.getSession(username, host);
             } else {
                 session = jsch.getSession(username, host, Integer.parseInt(host));
