@@ -48,10 +48,10 @@ public class SFtpClientService {
             return channel;
         } catch (Exception e) {
             log.error("SFTP连接异常", e);
-            if (channel != null) {
+            if (channel != null && channel.isConnected()) {
                 channel.disconnect();
             }
-            if (session != null) {
+            if (session != null && session.isConnected()) {
                 session.disconnect();
             }
             throw new RuntimeException( "系统异常,请联系管理员");
@@ -66,8 +66,12 @@ public class SFtpClientService {
             return;
         }
         try {
-            channel.disconnect();
-            channel.getSession().disconnect();
+            if(channel.isConnected()) {
+                channel.disconnect();
+            }
+            if(channel.getSession()!= null && channel.getSession().isConnected()) {
+                channel.getSession().disconnect();
+            }
         } catch (Exception e) {
             log.error("SFTP断开连接异常", e);
         }
