@@ -63,6 +63,12 @@
             <artifactId>jsch</artifactId>
             <version>0.1.53</version>
         </dependency>
+        <!--ftp工具包-->
+        <dependency>
+            <groupId>commons-net</groupId>
+            <artifactId>commons-net</artifactId>
+            <version>3.6</version>
+        </dependency>
     </dependencies>
 
 </project>
