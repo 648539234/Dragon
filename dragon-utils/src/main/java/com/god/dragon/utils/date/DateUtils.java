@@ -26,11 +26,11 @@ public class DateUtils {
     }
 
     /** Date转LocalDate **/
-    public static LocalDate getDate(Date date){
+    public static LocalDate getLocalDate(Date date){
         return  date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     }
 
-    /** Date转LocalDate **/
+    /** LocalDate转Date **/
     public static Date getDate(LocalDate date){
         return Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant());
     }
@@ -45,8 +45,8 @@ public class DateUtils {
         return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
     }
 
-    /** Date转LocalDateTime **/
-    public static Date getDateTime(LocalDateTime date){
+    /** LocalDateTime转Date **/
+    public static Date getDate(LocalDateTime date){
         return Date.from(date.atZone(ZoneId.systemDefault()).toInstant());
     }
 
@@ -75,9 +75,19 @@ public class DateUtils {
         return LocalDateTime.parse(dateString,DATE_FORMATTER);
     }
 
+    /** 格式化日期为 yyyy-MM-dd */
+    public static Date parseDate2Date(String dateString){
+        return getDate(LocalDateTime.parse(dateString,DATE_FORMATTER));
+    }
+
     /** 格式化日期为 yyyyMMdd **/
     public static LocalDateTime parseSimpleDate(String dateString){
         return LocalDateTime.parse(dateString,SIMPLE_DATE_FORMATTER);
+    }
+
+    /** 格式化日期为 yyyyMMdd **/
+    public static Date parseSimpleDate2Date(String dateString){
+        return getDate(LocalDateTime.parse(dateString,SIMPLE_DATE_FORMATTER));
     }
 
     /** 格式化日期为 HH:mm:ss **/
@@ -90,9 +100,109 @@ public class DateUtils {
         return LocalDateTime.parse(dateString,DATE_TIME_FORMATTER);
     }
 
+    /** 格式化日期为 yyyy-MM-dd HH:mm:ss **/
+    public static Date parseDateTime2Date(String dateString){
+        return getDate(LocalDateTime.parse(dateString,DATE_TIME_FORMATTER));
+    }
+
     /** 格式化日期为 yyyyMMddHHmmss **/
     public static LocalDateTime parseSimpleDateTime(String dateString){
         return LocalDateTime.parse(dateString,SIMPLE_DATE_TIME_FORMATTER);
+    }
+
+    /** 格式化日期为 yyyyMMddHHmmss **/
+    public static Date parseSimpleDateTime2Date(String dateString){
+        return getDate(LocalDateTime.parse(dateString,SIMPLE_DATE_TIME_FORMATTER));
+    }
+
+    /** Date格式化指定时间格式字符串 */
+    public static String format(Date date,DateTimeFormatter formatter){
+       return formatter.format(getDateTime(date));
+    }
+
+    /** Date格式化yyyy-MM-dd格式字符串 */
+    public static String formatDate(Date date){
+        return DATE_FORMATTER.format(getDateTime(date));
+    }
+
+    /** Date格式化yyyyMMdd格式字符串 */
+    public static String formatSimpleDate(Date date){
+        return SIMPLE_DATE_FORMATTER.format(getDateTime(date));
+    }
+
+    /** Date格式化HH:mm:ss格式字符串 */
+    public static String formatTime(Date date){
+        return TIME_FORMATTER.format(getDateTime(date));
+    }
+
+    /** Date格式化yyyy-MM-dd HH:mm:ss字符串 */
+    public static String formatDateTime(Date date){
+        return DATE_TIME_FORMATTER.format(getDateTime(date));
+    }
+
+    /** Date格式化yyyyMMddHHmmss字符串 */
+    public static String formatSimpleDateTime(Date date){
+        return SIMPLE_DATE_TIME_FORMATTER.format(getDateTime(date));
+    }
+
+    /** LocalDate格式化指定时间格式字符串 */
+    public static String format(LocalDate date,DateTimeFormatter formatter){
+        return formatter.format(date);
+    }
+
+    /** LocalDate格式化yyyy-MM-dd格式字符串 */
+    public static String formatDate(LocalDate date){
+        return DATE_FORMATTER.format(date);
+    }
+
+    /** LocalDate格式化yyyyMMdd格式字符串 */
+    public static String formatSimpleDate(LocalDate date){
+        return SIMPLE_DATE_FORMATTER.format(date);
+    }
+
+    /** LocalDate格式化HH:mm:ss格式字符串 */
+    public static String formatTime(LocalDate date){
+        return TIME_FORMATTER.format(date);
+    }
+
+    /** LocalDate格式化yyyy-MM-dd HH:mm:ss字符串 */
+    public static String formatDateTime(LocalDate date){
+        return DATE_TIME_FORMATTER.format(date);
+    }
+
+    /** LocalDate格式化yyyyMMddHHmmss字符串 */
+    public static String formatSimpleDateTime(LocalDate date){
+        return SIMPLE_DATE_TIME_FORMATTER.format(date);
+    }
+
+    /** LocalDateTime格式化指定时间格式字符串 */
+    public static String format(LocalDateTime date,DateTimeFormatter formatter){
+        return formatter.format(date);
+    }
+
+    /** LocalDateTime格式化yyyy-MM-dd格式字符串 */
+    public static String formatDate(LocalDateTime date){
+        return DATE_FORMATTER.format(date);
+    }
+
+    /** LocalDateTime格式化yyyyMMdd格式字符串 */
+    public static String formatSimpleDate(LocalDateTime date){
+        return SIMPLE_DATE_FORMATTER.format(date);
+    }
+
+    /** LocalDateTime格式化HH:mm:ss格式字符串 */
+    public static String formatTime(LocalDateTime date){
+        return TIME_FORMATTER.format(date);
+    }
+
+    /** LocalDateTime格式化yyyy-MM-dd HH:mm:ss字符串 */
+    public static String formatDateTime(LocalDateTime date){
+        return DATE_TIME_FORMATTER.format(date);
+    }
+
+    /** LocalDateTime格式化yyyyMMddHHmmss字符串 */
+    public static String formatSimpleDateTime(LocalDateTime date){
+        return SIMPLE_DATE_TIME_FORMATTER.format(date);
     }
 
     /** 获取当前日期 */
