@@ -4,10 +4,15 @@ package com.god.dragon.utils.reflect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author wuyuxiang
@@ -139,5 +144,15 @@ public class ReflectUtil {
                 }
             }catch (IllegalAccessException e){}
         }
+    }
+
+    /** 查询一个类上带有某个注解的全部属性，包括父类 */
+    public static List<Field> findFieldAnnotation(Class clazz, Class<? extends Annotation> annotationType){
+        List<Field> fields = new ArrayList();
+        while (clazz != null && clazz != Object.class){
+            fields.addAll(Arrays.asList(clazz.getDeclaredFields()));
+            clazz = clazz.getSuperclass();
+        }
+        return fields.stream().filter(item->item.isAnnotationPresent(annotationType)).collect(Collectors.toList());
     }
 }
