@@ -31,6 +31,10 @@ public class QrCodeGenerator {
     /**
      * 生成二维码
      * @param content 二维码内容一般是网站url
+     * @implNote 二维码是根据 {@link EncodeHintType#QR_VERSION QR_VERSION} 来确定内容大小的,根据内容大小可以分成1-40级别
+     * 版本40的二维码最大可容纳7089个数字（数字模式）或4296个字母（字母与数字模式），在二进制的编码模式下，单个QR码最多能存放2953个字节
+     * （1个中文汉字=3个字节，1个字母或数字=1个字节）
+     * <p>如果你超过了二维码最大容量限制,请提高QR_VERSION的级别(当前版本zxing框架会自动提升),或者限制传入二维码的内容大小</p>
      * @return 图片Base64String
      */
     public static String createQrCode(String content,String logoImageBase64){
