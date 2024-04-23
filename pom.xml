@@ -15,7 +15,7 @@
     <name>Dragon</name>
     <description>Dragon</description>
     <properties>
-        <java.version>11</java.version>
+        <java.version>21</java.version>
     </properties>
     <modules>
         <module>dragon-mybatis-starter</module>

@@ -12,11 +12,12 @@
     <artifactId>dragon-utils</artifactId>
 
     <dependencies>
-        <!-- lombok -->
+        <!-- lombok 较低版本不支持高版本的JVM-->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <scope>provided</scope>
+            <version>1.18.30</version>
         </dependency>
         <!--String工具包-->
         <dependency>
