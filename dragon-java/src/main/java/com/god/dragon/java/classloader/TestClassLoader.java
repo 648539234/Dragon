@@ -1,9 +1,5 @@
 package com.god.dragon.java.classloader;
 
-import java.io.File;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +8,7 @@ import java.util.List;
  * @version 1.0.0
  * @package com.god.dragon.java.classloader
  * @date 2022/11/10 11:11
- * @description 自定义类加载器,加载自定义的jar包文件
+ * @description 自定义类加载器,加载自定义的jar包文件,类似于LaunchedURLClassLoader（SpringBoot-可执行jar包读取jar包中jar包的原理）
  */
 public class TestClassLoader {
     public static void main(String[] args) throws Exception {
