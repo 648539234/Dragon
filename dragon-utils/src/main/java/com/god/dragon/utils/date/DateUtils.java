@@ -77,7 +77,7 @@ public class DateUtils {
 
     /** 格式化日期为 yyyy-MM-dd */
     public static Date parseDate2Date(String dateString){
-        return getDate(LocalDateTime.parse(dateString,DATE_FORMATTER));
+        return getDate(LocalDate.parse(dateString,DATE_FORMATTER));
     }
 
     /** 格式化日期为 yyyyMMdd **/
