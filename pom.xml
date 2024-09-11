@@ -22,6 +22,7 @@
         <module>dragon-utils</module>
         <module>dragon-java</module>
         <module>dargon-spring-starter</module>
+        <module>dragon-mybatis-plus-starter</module>
     </modules>
     <dependencies>
         <dependency>
