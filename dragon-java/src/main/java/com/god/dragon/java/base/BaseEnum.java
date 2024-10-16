@@ -70,7 +70,7 @@ public interface BaseEnum<V> {
         return Arrays.stream(enumClass.getEnumConstants())
                 .filter(item->item.getLabel().equals(label))
                 .findFirst()
-                .orElseThrow();
+                .orElseThrow(()->new IllegalArgumentException("不合法的参数"));
     }
 
     /**
@@ -87,12 +87,12 @@ public interface BaseEnum<V> {
             return Arrays.stream(enumClass.getEnumConstants())
                     .filter(item-> Objects.isNull(item.getValue()))
                     .findFirst()
-                    .orElseThrow();
+                    .orElseThrow(()->new IllegalArgumentException("不合法的参数"));
         }else{
             return Arrays.stream(enumClass.getEnumConstants())
                     .filter(item->value.equals(item.getValue()))
                     .findFirst()
-                    .orElseThrow();
+                    .orElseThrow(()->new IllegalArgumentException("不合法的参数"));
         }
     }
 
@@ -109,7 +109,7 @@ public interface BaseEnum<V> {
         return Arrays.stream(enumClass.getEnumConstants())
                 .filter(item->item.getLabel().equals(label))
                 .findFirst()
-                .orElseThrow()
+                .orElseThrow(()->new IllegalArgumentException("不合法的参数"))
                 .getValue();
     }
 
@@ -127,12 +127,14 @@ public interface BaseEnum<V> {
             return Arrays.stream(enumClass.getEnumConstants())
                     .filter(item-> Objects.isNull(item.getValue()))
                     .findFirst()
-                    .orElseThrow().getLabel();
+                    .orElseThrow(()->new IllegalArgumentException("不合法的参数"))
+                    .getLabel();
         }else{
             return Arrays.stream(enumClass.getEnumConstants())
                     .filter(item->value.equals(item.getValue()))
                     .findFirst()
-                    .orElseThrow().getLabel();
+                    .orElseThrow(()->new IllegalArgumentException("不合法的参数"))
+                    .getLabel();
         }
     }
 
